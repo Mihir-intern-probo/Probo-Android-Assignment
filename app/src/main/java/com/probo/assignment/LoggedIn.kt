@@ -8,39 +8,31 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.probo.assignment.databinding.ActivityLoggedInBinding
 
 class LoggedIn : AppCompatActivity() {
 
-    private lateinit var btnImg:Button;
-    private lateinit var selectImg: ImageView;
+    private lateinit var binding: ActivityLoggedInBinding
     private var IMAGE_REQUEST_CODE = 100;
-    private lateinit var tvEmail : TextView
-    private lateinit var tvPassword: TextView
-    private lateinit var tvDob : TextView
-    private lateinit var logout : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_logged_in)
+        binding = ActivityLoggedInBinding.inflate(layoutInflater);
+
+        setContentView(binding.root)
 
         var token = getSharedPreferences("username", Context.MODE_PRIVATE);
         supportActionBar?.hide();
 
-        btnImg = findViewById(R.id.pick_image);
-        selectImg = findViewById(R.id.img_save);
-        tvEmail = findViewById(R.id.tv_email)
-        tvDob = findViewById(R.id.tv_dob)
-        tvPassword = findViewById(R.id.tv_pass);
-        logout = findViewById(R.id.logout_btn);
-        tvEmail.text = token.getString("loginemail","")
-        tvPassword.text = token.getString("password","");
-        tvDob.text = token.getString("date","");
+        binding.tvEmail.text = token.getString("loginemail","")
+        binding.tvPass.text = token.getString("password","");
+        binding.tvDob.text = token.getString("date","");
 
-        btnImg.setOnClickListener{
+        binding.pickImage.setOnClickListener{
             pickImageGallery();
         }
 
-        logout.setOnClickListener{
+        binding.logoutBtn.setOnClickListener{
             var editor = token.edit();
             editor.putString("loginemail","").putString("password","").putString("date","");
             editor.commit();
@@ -60,7 +52,7 @@ class LoggedIn : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
             var token = getSharedPreferences("username", Context.MODE_PRIVATE);
-            selectImg.setImageURI(data?.data)
+            binding.imgSave.setImageURI(data?.data)
         }
     }
 }
